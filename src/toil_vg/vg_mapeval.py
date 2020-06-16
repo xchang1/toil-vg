@@ -79,6 +79,8 @@ def add_mapeval_options(parser):
                         '<index-base>.gcsa, <index-base>.lcp and <index-base>.xg to exist.'
                         'Provide a comma-separated pair to use the first index for alignment and'
                         ' the second (.xg only) for annotation in the comparison')
+    parser.add_argument('--gbwt-name', type=make_url, default=None,
+                        help='GBWT file to be used instead of <index-base>.gbwt')
     parser.add_argument('--use-gbwt', action='store_true',
                         help='Use the GBWT during alignment with map or mpmap, if available')
     parser.add_argument('--gbwt-penalties', nargs='+', type=float, default=[],
@@ -3063,16 +3065,29 @@ def make_mapeval_plan(toil, options):
                         (importer.load(ib + '.gcsa'),
                         importer.load(ib + '.gcsa.lcp')))
                     
-                try:
-                    # If the file exists/imports successfully, we import it
-                    plan.gbwt_file_ids.append(toil.importFile(ib + '.gbwt'))
-                except:
-                    if 'giraffe' not in options.mappers:
-                        # We don't absolutely need it
-                        plan.gbwt_file_ids.append(None)
-                    else:
-                        # We do need the GBWT to run
-                        raise
+                if options.gbwt_name:
+                    try:
+                        # If the file exists/imports successfully, we import it
+                        plan.gbwt_file_ids.append(toil.importFile(options.gbwt_name))
+                    except:
+                        if 'giraffe' not in options.mappers:
+                            # We don't absolutely need it
+                            plan.gbwt_file_ids.append(None)
+                        else:
+                            # We do need the GBWT to run
+                            raise
+
+                else: 
+                    try:
+                        # If the file exists/imports successfully, we import it
+                        plan.gbwt_file_ids.append(toil.importFile(ib + '.gbwt'))
+                    except:
+                        if 'giraffe' not in options.mappers:
+                            # We don't absolutely need it
+                            plan.gbwt_file_ids.append(None)
+                        else:
+                            # We do need the GBWT to run
+                            raise
                         
                 if 'giraffe' in options.mappers:
                     # We need the minimizer index

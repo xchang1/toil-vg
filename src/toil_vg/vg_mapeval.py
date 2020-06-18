@@ -3068,7 +3068,7 @@ def make_mapeval_plan(toil, options):
                 if options.gbwt_name:
                     try:
                         # If the file exists/imports successfully, we import it
-                        plan.gbwt_file_ids.append(toil.importFile(options.gbwt_name))
+                        plan.gbwt_file_ids.append(toil.importFile(options.gbwt_name+".gbwt"))
                     except:
                         if 'giraffe' not in options.mappers:
                             # We don't absolutely need it
@@ -3091,7 +3091,11 @@ def make_mapeval_plan(toil, options):
                         
                 if 'giraffe' in options.mappers:
                     # We need the minimizer index
-                    plan.minimizer_file_ids.append(importer.load(ib + '.min'))
+                    if options.gbwt_name:
+                        plan.minimizer_file_ids.append(toil.importFile(options.gbwt_name + '.min'))
+                    else: 
+                        plan.minimizer_file_ids.append(importer.load(ib + '.min'))
+
                     # We need the distance index
                     plan.distance_file_ids.append(importer.load(ib + '.dist'))
                     

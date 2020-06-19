@@ -3092,7 +3092,7 @@ def make_mapeval_plan(toil, options):
                 if 'giraffe' in options.mappers:
                     # We need the minimizer index
                     if options.gbwt_name:
-                        plan.minimizer_file_ids.append(toil.importFile(options.gbwt_name + '.min'))
+                        plan.minimizer_file_ids.append(importer.load(options.gbwt_name + '.min'))
                     else: 
                         plan.minimizer_file_ids.append(importer.load(ib + '.min'))
 

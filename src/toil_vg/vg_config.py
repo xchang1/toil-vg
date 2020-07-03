@@ -384,7 +384,7 @@ fq-split-disk: '200G'
 # the number of vg map jobs is controlled by reads-per-chunk (below)
 alignment-cores: 32
 alignment-mem: '160G'
-alignment-disk: '160G'
+alignment-disk: '200G'
 
 # Resources for chunking up a graph/gam for calling (and merging)
 # typically take xg for whoe grpah, and gam for a chromosome
